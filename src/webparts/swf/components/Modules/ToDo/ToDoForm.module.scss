@@ -1,0 +1,450 @@
+@import '../../../styles/variables';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Root shell
+// ─────────────────────────────────────────────────────────────────────────────
+.todoForm {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: 100vh;
+    background: #f3f4f8;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Loading state
+// ─────────────────────────────────────────────────────────────────────────────
+.loadingWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex: 1;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Toolbar
+// ─────────────────────────────────────────────────────────────────────────────
+.toolbar {
+    height: 52px;
+    background: linear-gradient(135deg, #0E4D92 0%, #1565C0 100%);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 10px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(14,77,146,0.3);
+
+    .formTitle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 600;
+        flex: 1;
+        min-width: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        .formTitleIcon {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+    }
+
+    .toolbarActions {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        flex-shrink: 0;
+    }
+
+    .toolbarDivider {
+        width: 1px;
+        height: 22px;
+        background: rgba(255,255,255,0.3);
+        margin: 0 4px;
+    }
+
+    // Primary save button
+    .btnSave {
+        background: #ffffff !important;
+        color: $primary-color !important;
+        border: none !important;
+        font-weight: 700 !important;
+        font-size: 12px !important;
+        height: 32px;
+        border-radius: 4px !important;
+        padding: 0 14px !important;
+        transition: all 0.15s !important;
+
+        &:hover:not(:disabled) {
+            background: #e8f1ff !important;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        &:disabled { opacity: 0.6 !important; }
+    }
+
+    // Secondary action buttons
+    .btnAction {
+        background: rgba(255,255,255,0.15) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255,255,255,0.35) !important;
+        font-size: 12px !important;
+        height: 32px;
+        border-radius: 4px !important;
+        padding: 0 12px !important;
+        transition: all 0.15s !important;
+
+        :global(.ms-Button-icon) { color: #ffffff !important; }
+
+        &:hover:not(:disabled) {
+            background: rgba(255,255,255,0.25) !important;
+            border-color: rgba(255,255,255,0.6) !important;
+        }
+
+        &:disabled { opacity: 0.5 !important; }
+
+        &.btnClose {
+            background: rgba(255,80,80,0.25) !important;
+            border-color: rgba(255,80,80,0.5) !important;
+            &:hover { background: rgba(255,80,80,0.4) !important; }
+        }
+    }
+
+    @media (max-width: 900px) {
+        height: auto;
+        flex-wrap: wrap;
+        padding: 8px 12px;
+
+        .formTitle { min-width: 100%; margin-bottom: 4px; font-size: 13px; }
+        .toolbarActions { flex-wrap: wrap; gap: 4px; }
+        .btnSave, .btnAction { height: 30px; padding: 0 10px !important; font-size: 11px !important; }
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Error Banner
+// ─────────────────────────────────────────────────────────────────────────────
+.errorBar {
+    flex-shrink: 0;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Scroll body — two-column layout
+// ─────────────────────────────────────────────────────────────────────────────
+.scrollContent {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 16px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+
+    @media (max-width: 900px) {
+        flex-direction: column;
+        padding: 12px;
+    }
+}
+
+.leftColumn {
+    flex: 65;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+}
+
+.rightColumn {
+    flex: 35;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 280px;
+
+    @media (max-width: 900px) {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section card
+// ─────────────────────────────────────────────────────────────────────────────
+.section {
+    background: #ffffff;
+    border: 1px solid #dde1ea;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+    .sectionHeader {
+        display: flex;
+        align-items: center;
+        padding: 10px 16px;
+        background: #f7f8fc;
+        border-bottom: 1px solid #e8eaf0;
+        cursor: pointer;
+        user-select: none;
+        gap: 8px;
+        transition: background 0.15s;
+
+        &:hover { background: #eef1f8; }
+
+        .sectionIcon {
+            font-size: 14px;
+            color: $primary-color;
+        }
+
+        .sectionTitle {
+            flex: 1;
+            font-size: 11px;
+            font-weight: 700;
+            color: #2c3245;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
+
+        .chevron {
+            font-size: 10px;
+            color: #888;
+            transition: transform 0.2s;
+        }
+    }
+
+    .sectionBody {
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Field layout helpers
+// ─────────────────────────────────────────────────────────────────────────────
+.fieldRow {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.fieldFull  { flex: 1; min-width: 100%; }
+.fieldHalf  { flex: 1; min-width: 200px; }
+.fieldThird { flex: 1; min-width: 140px; }
+
+// Checkbox alignment
+.checkboxField {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 2px;
+
+    .checkboxLabel {
+        font-size: 12px;
+        font-weight: 600;
+        color: #323130;
+        display: block;
+        margin-bottom: 6px;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Progress bar (under % Completed)
+// ─────────────────────────────────────────────────────────────────────────────
+.progressBar {
+    height: 6px;
+    background: #e0e0e0;
+    border-radius: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+
+    .progressFill {
+        height: 100%;
+        background: linear-gradient(90deg, #0078D4, #00B4D8);
+        border-radius: 3px;
+        transition: width 0.35s ease;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Metadata grid (read-only 2×2)
+// ─────────────────────────────────────────────────────────────────────────────
+.metaGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 16px;
+    padding: 12px;
+    background: #f9fafd;
+    border: 1px dashed #d8dcec;
+    border-radius: 4px;
+    margin-top: 4px;
+
+    .metaItem {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+
+        .metaLabel {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #888;
+        }
+
+        .metaValue {
+            font-size: 12px;
+            color: #444;
+        }
+    }
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Rich Text wrapper
+// ─────────────────────────────────────────────────────────────────────────────
+.richTextWrapper {
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+
+    // Force the RichText editor container to expand
+    :global(.ql-toolbar) {
+        border: 1px solid #d0d5de !important;
+        border-radius: 3px 3px 0 0;
+        background: #f7f8fc;
+        flex-shrink: 0;
+    }
+
+    :global(.ql-container) {
+        border: 1px solid #d0d5de !important;
+        border-top: none !important;
+        border-radius: 0 0 3px 3px;
+        min-height: 180px;
+        font-size: 13px;
+    }
+
+    :global(.ql-editor) {
+        min-height: 180px;
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Timeline
+// ─────────────────────────────────────────────────────────────────────────────
+.timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+    padding-left: 12px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 8px;
+        bottom: 8px;
+        width: 2px;
+        background: linear-gradient(180deg, $primary-color, #e0e4ea);
+    }
+}
+
+.timelineEvent {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 16px;
+    position: relative;
+
+    &:last-child { padding-bottom: 0; }
+}
+
+.timelineDot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: $primary-color;
+    border: 2px solid #ffffff;
+    box-shadow: 0 0 0 2px $primary-color;
+    flex-shrink: 0;
+    margin-left: -7px;
+    margin-top: 2px;
+    z-index: 1;
+
+    &.timelineDotLast {
+        background: #a0a8b8;
+        box-shadow: 0 0 0 2px #a0a8b8;
+    }
+}
+
+.timelineContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+
+    strong { font-size: 13px; color: #2c3245; }
+
+    .timelineDate {
+        font-size: 11px;
+        color: $primary-color;
+    }
+
+    .timelineDesc {
+        font-size: 12px;
+        color: #666;
+    }
+}
+
+.timelineEmpty {
+    font-size: 12px;
+    color: #aaa;
+    font-style: italic;
+    margin: 0;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Fluent UI overrides inside the form
+// ─────────────────────────────────────────────────────────────────────────────
+.todoForm {
+    :global(.ms-Label) {
+        font-weight: 600;
+        font-size: 12px;
+        color: #323130;
+    }
+
+    :global(.ms-TextField-fieldGroup),
+    :global(.ms-Dropdown-title) {
+        border-radius: 3px;
+        border-color: #c8cdd8;
+        transition: border-color 0.15s;
+
+        &:hover { border-color: $primary-color; }
+    }
+
+    :global(.ms-TextField-fieldGroup:focus-within) {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 1px $primary-color;
+    }
+
+    // DatePicker
+    :global(.ms-DatePicker) { width: 100%; }
+
+    // People picker
+    :global(.ms-BasePicker-text) {
+        border-radius: 3px;
+        border-color: #c8cdd8;
+        min-height: 32px;
+    }
+}

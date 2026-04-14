@@ -1,0 +1,194 @@
+@import '../../styles/variables';
+
+.genericGrid {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: #f3f4f8;
+
+    // ── Toolbar ──────────────────────────────────────────────────────────────
+    .gridHeader {
+        background: #ffffff;
+        border-bottom: 1px solid #e0e4ea;
+        padding: 8px 16px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+
+        .commandBar {
+            background: transparent;
+            flex: 1;
+
+            :global(.ms-CommandBar) {
+                background: transparent;
+                padding: 0;
+            }
+
+            :global(.ms-Button--commandBar) {
+                background: transparent;
+                color: #323130;
+                font-size: 14px;
+                height: 40px;
+                border-radius: 4px;
+
+                &:hover {
+                    background: #f4f6f9;
+                    color: $primary-color;
+                }
+
+                :global(.ms-Button-icon) {
+                    color: $primary-color;
+                    font-size: 16px;
+                }
+            }
+        }
+
+        .cmdNew {
+            :global(.ms-Button-label) { font-weight: 700; color: $primary-color; }
+        }
+    }
+
+    // ── Selection Summary Bar ─────────────────────────────────────────────────
+    .selectionBar {
+        background: #0078d4;
+        padding: 10px 24px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+        box-shadow: 0 2px 8px rgba(0, 120, 212, 0.2);
+        z-index: 5;
+
+        .selectionInfo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .selectionIcon {
+                font-size: 18px;
+            }
+
+            .selectionBadge {
+                background: #ffffff;
+                color: #0078d4;
+                border-radius: 4px;
+                padding: 2px 8px;
+                font-size: 12px;
+                font-weight: 800;
+            }
+        }
+
+        .clearSelection {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            color: #ffffff;
+            padding: 4px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.25);
+                border-color: #ffffff;
+            }
+        }
+    }
+
+    // ── Data Grid Container ───────────────────────────────────────────────────
+    .listContainer {
+        flex: 1;
+        overflow: auto;
+        background: #ffffff;
+
+        .detailsList {
+            :global(.ms-DetailsHeader) {
+                background: #f8f9fc;
+                border-bottom: 2px solid #e2e5ec;
+                padding-top: 0;
+                height: 48px;
+                line-height: 48px;
+            }
+
+            :global(.ms-DetailsHeader-cell) {
+                border-right: 1px solid #eaedf3;
+                font-weight: 700;
+                font-size: 12px;
+                color: #4a5064;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                box-sizing: border-box;
+                padding: 0 12px; // Consistent padding
+
+                &:last-child { border-right: none; }
+                &:hover { background: #eff2f9; }
+
+                :global(.ms-DetailsHeader-cellName) {
+                    font-weight: 700;
+                }
+            }
+
+            :global(.ms-DetailsRow) {
+                border-bottom: 1px solid #f0f2f7;
+                transition: background 0.15s ease;
+                min-height: 48px;
+
+                &:hover { 
+                    background: #f2f7ff !important;
+                }
+
+                &:global(.is-selected) { 
+                    background: #edf5ff !important; 
+                    border-left: 4px solid #0078d4;
+                    padding-left: -4px;
+                }
+            }
+
+            :global(.ms-DetailsRow-cell) {
+                border-right: 1px solid #f0f2f7;
+                font-size: 14px;
+                color: #333;
+                padding: 12px; // Match header vertical alignment center
+                vertical-align: middle;
+                box-sizing: border-box;
+
+                &:last-child { border-right: none; }
+            }
+
+            // Alternating rows for readability
+            :global(.ms-List-cell:nth-child(even) .ms-DetailsRow) {
+                background: #fafbfd;
+            }
+        }
+    }
+
+    // ── Status Bar ───────────────────────────────────────────────────────────
+    .statusBar {
+        padding: 8px 16px;
+        background: #ffffff;
+        border-top: 1px solid #e0e4ea;
+        font-size: 12px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-shrink: 0;
+
+        .exportHint {
+            color: $primary-color;
+            font-style: italic;
+            font-size: 11px;
+        }
+    }
+
+    // ── Responsive ───────────────────────────────────────────────────────────
+    @media (max-width: 768px) {
+        .gridHeader { padding: 4px 0; }
+        .listContainer :global(.ms-DetailsHeader-cell) { font-size: 11px; }
+        .listContainer :global(.ms-DetailsRow-cell) { font-size: 12px; padding: 8px 8px; }
+    }
+}

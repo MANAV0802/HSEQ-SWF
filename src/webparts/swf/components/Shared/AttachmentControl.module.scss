@@ -1,0 +1,49 @@
+@import '../../styles/variables';
+
+.attachmentControl {
+    .attachmentItem {
+        padding: 5px 10px;
+        background: #f3f2f1;
+        border-radius: 4px;
+        
+        .fileIcon {
+            margin-right: 10px;
+            color: $primary-color;
+        }
+
+        .fileName {
+            flex: 1;
+            text-decoration: none;
+            color: #333;
+            font-size: 13px;
+            &:hover {
+                text-decoration: underline;
+                color: $primary-color;
+            }
+        }
+    }
+
+    .uploadArea {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: $transition-smooth;
+        background: #fafafa;
+
+        &:hover {
+            border-color: $primary-color;
+            background: #f0f7ff;
+        }
+
+        .uploadIcon {
+            font-size: 24px;
+            margin-bottom: 8px;
+            color: #666;
+        }
+    }
+}

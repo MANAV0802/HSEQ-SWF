@@ -1,0 +1,27 @@
+// Premium Color Palette
+$primary-color: #004a99;
+$secondary-color: #0078d4;
+$accent-color: #d13438;
+$bg-dark: #1a1a1a;
+$sidebar-bg: #f8f9fa;
+$text-sidebar: #333;
+$active-bg: #004a99;
+$active-text: #ffffff;
+
+// Glassmorphism Mixins
+@mixin glass-panel {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+@mixin glass-panel-dark {
+  background: rgba(20, 20, 20, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+// Transitions
+$transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

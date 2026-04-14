@@ -1,0 +1,113 @@
+@import '../../styles/variables';
+
+.sidebar {
+    width: 260px;
+    height: 100%;
+    background: #ffffff;
+    border-right: 1px solid #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    transition: width 0.3s ease;
+    background: #f8f9fa;
+
+    &.collapsed {
+        width: 68px;
+        overflow-x: hidden;
+        
+        .logoSection .logo {
+            font-size: 1.5rem;
+            text-align: center;
+        }
+
+        .navItem {
+            padding: 15px 0 !important;
+            justify-content: center;
+            .itemIcon {
+                margin: 0 !important;
+                font-size: 18px;
+            }
+        }
+    }
+
+    .logoSection {
+        height: 60px;
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        border-bottom: 1px solid #e0e0e0;
+        
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: $primary-color;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+    }
+
+    .nav {
+        padding: 10px 0;
+        
+        .navGroup {
+            margin-bottom: 5px;
+
+            .groupHeader {
+                display: flex;
+                align-items: center;
+                padding: 12px 20px;
+                cursor: pointer;
+                color: #555;
+                font-weight: 700;
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                transition: background 0.2s;
+
+                &:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                }
+
+                .groupIcon {
+                    margin-right: 12px;
+                    font-size: 14px;
+                }
+
+                .chevron {
+                    margin-left: auto;
+                    font-size: 10px;
+                }
+            }
+
+            .subItems {
+                .navItem {
+                    display: flex;
+                    align-items: center;
+                    padding: 10px 20px 10px 48px;
+                    cursor: pointer;
+                    color: #666;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                    white-space: nowrap;
+
+                    &:hover {
+                        background: rgba(0, 74, 153, 0.05);
+                        color: $primary-color;
+                    }
+
+                    &.active {
+                        background: $active-bg;
+                        color: $active-text;
+                        font-weight: 600;
+                        border-right: 3px solid $primary-color;
+                    }
+
+                    .itemIcon {
+                        margin-right: 12px;
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+}

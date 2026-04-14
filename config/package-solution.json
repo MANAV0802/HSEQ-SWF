@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "hseq-swf-client-side-solution",
+    "id": "95cf6803-432b-4b03-93ba-463364429568",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.20.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "HSEQ-SWF description"
+      },
+      "longDescription": {
+        "default": "HSEQ-SWF description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "hseq-swf Feature",
+        "description": "The feature that activates elements of the hseq-swf solution.",
+        "id": "3398cafb-aba9-464c-b822-53d126c2c167",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/hseq-swf.sppkg"
+  }
+}

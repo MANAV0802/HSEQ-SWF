@@ -1,0 +1,75 @@
+import * as React from 'react';
+import styles from './MainLayout.module.scss';
+import Sidebar from './Sidebar';
+
+export interface IMainLayoutProps {
+    activeModule: string;
+    onModuleChange: (module: string) => void;
+    children?: React.ReactNode;
+}
+
+const MODULE_LABELS: Record<string, string> = {
+    ToDo: 'To Do',
+    Compliance: 'Compliance Register',
+    Projects: 'Projects'
+};
+
+const MainLayout: React.FC<IMainLayoutProps> = ({ children, activeModule, onModuleChange }) => {
+    const [isMobileOpen, setIsMobileOpen] = React.useState(false);
+
+    const handleItemClick = (module: string) => {
+        onModuleChange(module);
+        setIsMobileOpen(false);
+    };
+
+    return (
+        <div className={styles.mainLayout}>
+            {/* Mobile overlay */}
+            {isMobileOpen && (
+                <div
+                    className={styles.overlay}
+                    onClick={() => setIsMobileOpen(false)}
+                />
+            )}
+
+            {/* ── Sidebar ── */}
+            <div className={`${styles.sidebarWrapper} ${isMobileOpen ? styles.mobileOpen : ''}`}>
+                <Sidebar
+                    activeItem={MODULE_LABELS[activeModule] || activeModule}
+                    onItemClick={handleItemClick}
+                />
+            </div>
+
+            {/* ── Main Content Area ── */}
+            <div className={styles.contentArea}>
+                {/* Header */}
+                <header className={styles.header}>
+                    {/* Mobile hamburger — only visible on small screens */}
+                    <button
+                        className={styles.mobileMenuBtn}
+                        onClick={() => setIsMobileOpen(!isMobileOpen)}
+                        aria-label="Open navigation"
+                    >
+                        <span /><span /><span />
+                    </button>
+
+                    {/* Breadcrumb */}
+                    <div className={styles.breadcrumb}>
+                        <span className={styles.breadcrumbRoot}>ASP Assist Group</span>
+                        <span className={styles.breadcrumbSep}>›</span>
+                        <span className={styles.breadcrumbCurrent}>
+                            {MODULE_LABELS[activeModule] || activeModule}
+                        </span>
+                    </div>
+                </header>
+
+                {/* Page Content */}
+                <div className={styles.mainContent}>
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default MainLayout;
