@@ -32,6 +32,7 @@ const ToDoModule: React.FC<IToDoModuleProps> = ({ context }) => {
     const [loading, setLoading] = React.useState(true);
     const [selectedItem, setSelectedItem] = React.useState<IToDoItem | null>(null);
     const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+    const [formVersion, setFormVersion] = React.useState(0);
 
     // ── Pagination & Search State ─────────────────────────────────────────────
     const [currentPage, setCurrentPage] = React.useState(1);
@@ -270,7 +271,11 @@ const ToDoModule: React.FC<IToDoModuleProps> = ({ context }) => {
         }
     };
 
-    const handleNew = () => { setSelectedItem(null); setIsPanelOpen(true); };
+    const handleNew = () => { 
+        setSelectedItem(null); 
+        setFormVersion(prev => prev + 1);
+        setIsPanelOpen(true); 
+    };
     const handleEdit = (item: IToDoItem) => { setSelectedItem(item); setIsPanelOpen(true); };
 
     const handleSave = async (payload: any, mode: 'stay' | 'close' | 'new') => {
@@ -322,21 +327,42 @@ const ToDoModule: React.FC<IToDoModuleProps> = ({ context }) => {
                 setSelectedItem(null);
             } else if (mode === 'new') {
                 setSelectedItem(null);
+                setFormVersion(prev => prev + 1);
             } else if (mode === 'stay' && resultItemId) {
                 // Attempt to find the fresh item to keep the form updated
                 const freshItem = refreshedData.find(i => i.Id === resultItemId);
                 if (freshItem) {
                     setSelectedItem(freshItem);
-                } else if (isUpdate) {
-                    // If refresh didn't return the item but we were updating, 
-                    // ensure we at least keep the current ID in state to prevent duplicates on next save
-                    // We can patch the existing selection with the payload values
-                    setSelectedItem(prev => prev ? { ...prev, ...payload } : null);
+                } else {
+                    // For both Add and Update, if freshItem is not found (search lag),
+                    // ensure we track the ID so the form transitions to Edit mode.
+                    // If isUpdate was false, we use the new ID from SharePoint result.
+                    setSelectedItem(prev => ({ 
+                        ...((prev || {}) as any), 
+                        ...payload, 
+                        Id: resultItemId 
+                    } as IToDoItem));
                 }
             }
         } catch (e) {
             console.error('Save failed', e);
             alert('Save failed. Check browser console for details.');
+        }
+    };
+    
+    const handleRefresh = async () => {
+        if (selectedItem?.Id) {
+            try {
+                // Fetch fresh copy from SharePoint
+                const items = await spService.getToDoItems();
+                const fresh = items.find(i => i.Id === selectedItem.Id);
+                if (fresh) setSelectedItem(fresh);
+            } catch (e) {
+                console.error('Refresh failed', e);
+            }
+        } else {
+            // On a new form, refresh simply clears the form
+            setFormVersion(prev => prev + 1);
         }
     };
 
@@ -386,11 +412,13 @@ const ToDoModule: React.FC<IToDoModuleProps> = ({ context }) => {
                 }}
             >
                 <ToDoForm
+                    key={`${selectedItem?.Id || 'new'}-${formVersion}`}
                     item={selectedItem}
                     spService={spService}
                     context={context}
-                    onClose={() => setIsPanelOpen(false)}
                     onSave={handleSave}
+                    onRefresh={handleRefresh}
+                    onClose={() => setIsPanelOpen(false)}
                 />
             </Panel>
         </React.Fragment>

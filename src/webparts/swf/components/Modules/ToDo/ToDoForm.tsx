@@ -27,6 +27,7 @@ export interface IToDoFormProps {
     spService: SPService;
     context: WebPartContext;
     onSave: (payload: any, mode?: 'stay' | 'close' | 'new') => void;
+    onRefresh: () => void;
     onClose: () => void;
 }
 
@@ -61,7 +62,7 @@ const buildFormData = (item: IToDoItem | null): IToDoItem => {
 };
 
 // ── Main Form ─────────────────────────────────────────────────────────────────
-const ToDoForm: React.FC<IToDoFormProps> = ({ item, spService, context, onSave, onClose }) => {
+const ToDoForm: React.FC<IToDoFormProps> = ({ item, spService, context, onSave, onRefresh, onClose }) => {
     const isNew = !item?.Id;
 
     const [formData, setFormData] = React.useState<IToDoItem>(buildFormData(item));
@@ -99,10 +100,12 @@ const ToDoForm: React.FC<IToDoFormProps> = ({ item, spService, context, onSave, 
     // ── Load options + reset form when item changes ───────────────────────────
     React.useEffect(() => {
         // ───────────────────────────────────────────────────────────────────────
-        // CRITICAL: reset formData including IDs from lookup objects
+        // CRITICAL: reset all form state to ensure a clean slate (especially for Save & New)
         // ───────────────────────────────────────────────────────────────────────
         setFormData(buildFormData(item));
         setPendingAttachments([]);
+        setAttachments([]);
+        setError(null);
 
         // ── Resolve and Set Dynamic Field for Edit mode ──
         if (item?.Regarding) {
@@ -293,7 +296,7 @@ const ToDoForm: React.FC<IToDoFormProps> = ({ item, spService, context, onSave, 
                         iconProps={{ iconName: 'Refresh' }}
                         text="Refresh"
                         disabled={saving}
-                        onClick={() => fetchAttachments()}
+                        onClick={onRefresh}
                     />
                     <DefaultButton
                         className={`${styles.btnAction} ${styles.btnClose}`}
